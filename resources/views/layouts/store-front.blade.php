@@ -34,7 +34,10 @@
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
     <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
     <!--WARNING: Respond.js doesn't work if you view the page via file://-->
-    <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="{{ asset('assets/front/https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js') }}"></script><![endif]-->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="{{ asset('assets/front/https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js') }}"></script>
+    <![endif]-->
   </head>
   <!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10"><![endif]-->
   <!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10"><![endif]-->
@@ -72,7 +75,7 @@
       <nav class="navigation">
         <div class="container-fluid">
           <div class="navigation__column left">
-            <div class="header__logo"><a class="ps-logo" href="index.html"><img src="{{ asset('assets/front/images/logo.png') }}" alt=""></a></div>
+            <div class="header__logo"><a class="ps-logo" href="{{route('home')}}"><img src="{{ asset('assets/front/images/logo.png') }}" alt=""></a></div>
           </div>
           <div class="navigation__column center">
                 <ul class="main-menu menu">
@@ -213,9 +216,9 @@
       </div>
     </div>
     <main class="ps-main">
-      
+
         {{ $slot }}
-      
+
       <div class="ps-subscribe">
         <div class="ps-container">
           <div class="row">

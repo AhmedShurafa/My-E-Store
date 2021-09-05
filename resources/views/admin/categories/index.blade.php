@@ -23,7 +23,7 @@
             <tr>
                 <th>$loop</th>
                 <th>ID</th>
-                <th>Name</th>
+                <th>{{__('Name')}}</th>
                 <th>Slug</th>
                 <th>Parent ID</th>
                 <th>Status</th>
@@ -42,8 +42,11 @@
                 <td>{{ $category->parent_name }}</td>
                 <td>{{ $category->status }}</td>
                 <td>{{ $category->created_at }}</td>
-                <td><a href="{{ route('categories.edit', $category->id) }}"
-                    class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a></td>
+                <td>
+
+                    <a href="{{ route('categories.edit', $category->id) }}"
+                    class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
+                </td>
 
                 <td><form action="{{ route('categories.destroy', $category->id) }}" method="post">
                     @csrf
@@ -54,8 +57,10 @@
                 </form></td>
             </tr>
             @endforeach
+
         </tbody>
     </table>
+        {{$categories->links()}}
 
 @endsection
 

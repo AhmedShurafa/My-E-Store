@@ -40,13 +40,27 @@ class Category extends Model
         }
         return $value;
     }
-
-
     // Non-exists Attribute
     // $model->original_name
     public function getOriginalNameAttribute()
     {
         return $this->attributes['name'];
     }
+    //
+    public function products(){
+        return $this->hasMany(Product::class,'category_id','id');
+    }
 
+    public function children()
+    {
+        return $this->hasMany(Category::class,'parent_id','id');
+    }
+
+    public function parent()
+    {
+            return $this->belongsTo(self::class,'parent_id','id')
+            ->withDefault([
+                'name' => 'No Parent'
+            ]);
+    }
 }

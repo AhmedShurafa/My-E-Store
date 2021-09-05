@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Country;
 use App\Models\Product;
 use App\Scopes\ActiveStatusScope;
 use Illuminate\Http\Request;
@@ -19,12 +20,15 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny',Product::class); // ot viewAny
+
         $products = Product::withoutGlobalScopes([ActiveStatusScope::class])
-            ->join('categories', 'categories.id', '=', 'products.category_id')
-            ->select([
-                'products.*',
-                'categories.name as category_name',
-            ])
+//            ->join('categories', 'categories.id', '=', 'products.category_id')
+//            ->select([
+//                'products.*',
+//                'categories.name as category_name',
+//            ])
+            ->with('category.parent') //category.parent.parent
             ->paginate(15);
 
 
@@ -32,7 +36,6 @@ class ProductsController extends Controller
             'products' => $products,
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -40,6 +43,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
+        $this->authorize('create',Product::class);
         $categories = Category::pluck('name', 'id');
 
         return view('admin.products.create', [
@@ -56,6 +60,8 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('store',Product::class);
+
         $request->validate(Product::validateRules());
 
         /*$request->merge([
@@ -76,7 +82,11 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
+
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
+
+        $this->authorize('show',$product);
+
         return view('admin.products.show', [
             'product' => $product,
         ]);
@@ -91,6 +101,9 @@ class ProductsController extends Controller
     public function edit($id)
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
+
+        $this->authorize('edit',$product);
+
         return view('admin.products.edit', [
             'product' => $product,
             'categories' => Category::withTrashed()->pluck('name', 'id'),
@@ -107,6 +120,9 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
+
+        $this->authorize('update',$product);
+
 
         $request->validate( Product::validateRules() );
 
@@ -146,6 +162,9 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
+
+        $this->authorize('destroy',$product);
+
         $product->delete();
 
         //Storage::disk('uploads')->delete($product->image_path);
@@ -158,6 +177,7 @@ class ProductsController extends Controller
     public function trash()
     {
         $products = Product::withoutGlobalScope('active')->onlyTrashed()->paginate();
+
         return view('admin.products.trash', [
             'products' => $products,
         ]);

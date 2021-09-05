@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,15 @@ class CategoriesController extends Controller
             ->orderBy('categories.created_at', 'DESC')
             ->orderBy('categories.name', 'ASC')
             ->withTrashed()
-            ->get();
+            ->simplepaginate(1);
+
+//        $entries = Category::with('parent')
+//                        ->withCount('products as count')
+//                        ->has('products'); // if has relation
+//                        ->WhereHas('products',function($q){
+//                          $q->where('price','<',120)
+//                          }) // if has relation and add condition
+//                        ->doesntHava('products'); // if not has relation
 
         // return collection of stdObj object
         /*$entries = DB::table('categories')
@@ -79,6 +88,8 @@ class CategoriesController extends Controller
      */
     public function create()
     {
+//        Gate::authorize('categories.create');
+
         $parents = Category::all();
         // dd($parents);
         $category = new Category();
@@ -96,7 +107,7 @@ class CategoriesController extends Controller
         // Validation rules
         $rules = [
             'name' => 'required|string|max:255|min:3|unique:categories',
-            'parent_id' => 'required|int|exists:categories,id',
+            'parent_id' => 'nullable|int|exists:categories,id',
             'description' => 'nullable|min:5',
             'status' => 'required|in:active,draft',
             'image' => 'image|max:512000|dimensions:min_width=300,min_height=300',
@@ -173,9 +184,23 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        // Select  * Form products where category_id = ? order by price ASC
+
+//        return $category->products()
+//                        ->with('category:id,name')
+//                        ->where('price','>',150)
+//                        ->orderBy('name')
+//                        ->get();
+
+        return $category->load([
+            'parent',
+            'products' => function($q)
+            {
+                $q->orderBy('price','ASC')->where('status','active');
+            }
+            ])->get();
     }
 
     /**

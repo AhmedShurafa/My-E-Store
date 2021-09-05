@@ -38,7 +38,7 @@ class CategoryRequest extends FormRequest
                     }
                 }
             ],
-            'parent_id' => 'required|int|exists:categories,id',
+            'parent_id' => 'int|exists:categories,id',
             'description' => [
                 'nullable',
                 'min:5',

@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\CheckUserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +21,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
 
@@ -40,27 +39,44 @@ require __DIR__.'/auth.php';
 // Route::delete('/admin/categories/{id}', [CategoriesController::class, 'destroy'])
 //     ->name('categories.destroy');
 
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ],
+],function (){
 
-Route::resource('categories', 'Admin\CategoriesController');
+    Route::namespace('Admin')->prefix('admin/')->middleware(['auth','user.type'])
+            ->group(function () {
 
-Route::get('/admin/procategoriesducts/trash', [CategoriesController::class, 'trash'])
-    ->name('categories.trash');
-Route::put('/admin/categories/trash/{id?}', [CategoriesController::class, 'restore'])
-    ->name('categories.restore');
-Route::delete('/admin/categories/trash/{id?}', [CategoriesController::class, 'forceDelete'])
-    ->name('categories.force-delete');
+                Route::resource('categories', 'CategoriesController');
+
+                Route::get('categories/trash', [CategoriesController::class, 'trash'])
+                    ->name('categories.trash');
+                Route::put('categories/trash/{id?}', [CategoriesController::class, 'restore'])
+                    ->name('categories.restore');
+                Route::delete('categories/trash/{id?}', [CategoriesController::class, 'forceDelete'])
+                    ->name('categories.force-delete');
+
+                Route::resource('products', 'ProductsController');
+
+                Route::get('products/trash', [ProductsController::class, 'trash'])
+                    ->name('products.trash');
+                Route::put('products/trash/{id?}', [ProductsController::class, 'restore'])
+                    ->name('products.restore');
+                Route::delete('products/trash/{id?}', [ProductsController::class, 'forceDelete'])
+                    ->name('products.force-delete');
+
+                Route::resource('roles', 'RoleController');
+    });
 
 
+});
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ],
+    'namespace' => 'admin'
+    ],function (){
+
+    require __DIR__.'/auth.php';
 
 
-Route::resource('products', 'Admin\ProductsController')
-->middleware(['auth']);
-
-
-Route::get('/admin/products/trash', [ProductsController::class, 'trash'])
-    ->name('products.trash');
-Route::put('/admin/products/trash/{id?}', [ProductsController::class, 'restore'])
-    ->name('products.restore');
-Route::delete('/admin/products/trash/{id?}', [ProductsController::class, 'forceDelete'])
-    ->name('products.force-delete');
-
+});

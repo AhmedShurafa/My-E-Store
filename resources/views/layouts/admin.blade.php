@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Starter</title>
+    <title>Dashboard</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -216,6 +216,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="{{ route('roles.index') }}" class="nav-link">
+                                {{-- <i class="nav-icon fas fa-th"></i> --}}
+{{--                                <i class="nav-icon fas fa-role"></i>--}}
+                                <i class="nav-icon fas fa-user-tag"></i>
+                                <p>
+                                    Roles
+                                </p>
+                            </a>
+                        </li>
+
 
                         {{-- <li class="nav-item menu-open">
                             <a href="#" class="nav-link active">
@@ -276,7 +287,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             <!-- Main content -->
             <div class="content">
-                <div class="container">
+                <div class="">
                     <div class="row">
                         <div class="col-12">
                             @yield('content')

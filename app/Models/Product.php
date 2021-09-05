@@ -62,7 +62,7 @@ class Product extends Model
     {
         return [
             'name' => 'required|max:255',
-            'category_id' => 'required|int|exists:categories,id',
+            'category_id' => 'nullable|int|exists:categories,id',
             'description' => 'nullable',
             'image' => 'nullable|image|dimensions:min_width=300,min_height=300',
             'price' => 'nullable|numeric|min:0',
@@ -101,5 +101,23 @@ class Product extends Model
     {
         $fomatter = new NumberFormatter(App::getLocale(), NumberFormatter::CURRENCY);
         return $fomatter->formatCurrency($this->price, 'EUR');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class,'category_id','id')
+            ->withDefault();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id')
+            ->withDefault();
+    }
+
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class,'rateable',
+                                  'rateable_type','rateable_id','id');
     }
 }

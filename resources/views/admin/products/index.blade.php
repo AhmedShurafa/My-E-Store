@@ -21,10 +21,10 @@
 
     <x-alert />
 
-    <x-message type="info" :count="1 + 1" class="display-1">
-        <x-slot name="title">Info</x-slot>
-        Welcome to Laravel
-    </x-message>
+{{--    <x-message type="info" :count="1 + 1" class="display-1">--}}
+{{--        <x-slot name="title">Info</x-slot>--}}
+{{--        Welcome to Laravel--}}
+{{--    </x-message>--}}
 
     <table class="table">
         <thead>
@@ -45,24 +45,33 @@
             <tr>
                 <td><img src="{{ $product->image_url }}" width="60" alt=""></td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->category_name }}</td>
+{{--                <td>{{ $product->category_name }}</td>--}}
+                <td>{{ $product->category->name }} / {{$product->category->parent->name}}</td>
                 <td>{{ $product->formatted_price }}</td>
                 <td>{{ $product->quantity }}</td>
                 <td>{{ $product->status }}</td>
                 <td>{{ $product->created_at }}</td>
 
-                <td><a href="{{ route('products.edit', $product->id) }}"
-                    class="btn btn-sm btn-success">
-                    <i class="fas fa-edit"></i>
-                </a></td>
+                <td>
+                    @can('update',$product)
+                        <a href="{{ route('products.edit', $product->id) }}"
+                        class="btn btn-sm btn-success">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    @endcan
+                </td>
 
-                <td><form action="{{ route('products.destroy', $product->id) }}" method="post">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form></td>
+                <td>
+                    @can('destroy',$product)
+                            <form action="{{ route('products.destroy', $product->id) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    @endcan
+                </td>
             </tr>
             @endforeach
         </tbody>

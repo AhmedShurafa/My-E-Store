@@ -18,7 +18,7 @@
     <div class="form-group">
         <label for="">Parent</label>
         <select name="parent_id" id="parent_id" class="form-control @error('parent_id') is-invalid @enderror">
-            <option value="">No Parent</option>
+            <option value="0">No Parent</option>
             @foreach ($parents as $parent)
             <option value="{{ $parent->id }}" @if($parent->id == old('parent_id', $category->parent_id)) selected @endif>{{ $parent->name }}</option>
             @endforeach
