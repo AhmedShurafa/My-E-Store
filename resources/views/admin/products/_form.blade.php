@@ -1,4 +1,9 @@
-    @if ($errors->any())
+
+@section('style')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
+@endsection
+
+@if ($errors->any())
     <div class="alert alert-danger">
         <ul>
             @foreach($errors->all() as $message)
@@ -7,7 +12,7 @@
         </ul>
     </div>
     @endif
-    
+
     <div class="form-group">
         <label for="">Product Name</label>
         <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->name) }}">
@@ -22,13 +27,6 @@
         <label for="">Description</label>
         <textarea class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description', $product->description) }}</textarea>
         @error('description')
-        <p class="invalid-feedback">{{ $message }}</p>
-        @enderror
-    </div>
-    <div class="form-group">
-        <label for="">Image</label>
-        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
-        @error('image')
         <p class="invalid-feedback">{{ $message }}</p>
         @enderror
     </div>
@@ -56,7 +54,7 @@
     <div class="form-group">
         <x-form-input type="number" name="length" label="Length" :value="$product->length" />
     </div>
-    
+
     <div class="form-group">
         <label for="status">Status</label>
         <div>
@@ -77,6 +75,43 @@
         <p class="text-danger">{{ $message }}</p>
         @enderror
     </div>
+
+    <hr>
+    <div class="form-group">
+        <label for="">Image</label>
+        <input type="file"
+               class="form-control @error('image') is-invalid @enderror  dropzone" id="dropzone"
+               data-action="{{route('products.store')}}"
+               name="image" multiple>
+        @error('image')
+        <p class="invalid-feedback">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <hr>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">{{ $button }}</button>
     </div>
+
+@section('script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Dropzone.autoDiscover = false;
+            $("#dropzone").dropzone({
+                url: "hn_SimpeFileUploader.ashx",
+                addRemoveLinks: true,
+                success: function (file, response) {
+                    var imgName = response;
+                    file.previewElement.classList.add("dz-success");
+                    console.log("Successfully uploaded :" + imgName);
+                },
+                error: function (file, response) {
+                    file.previewElement.classList.add("dz-error");
+                }
+            });
+        });
+    </script>
+@endsection

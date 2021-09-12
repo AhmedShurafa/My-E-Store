@@ -8,6 +8,7 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Scopes\ActiveStatusScope;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,9 +19,15 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->authorizeResource(Product::class,'products');
+    }
+
     public function index()
     {
-        $this->authorize('viewAny',Product::class); // ot viewAny
+//        $this->authorize('view-any',Product::class); // ot viewAny
 
         $products = Product::withoutGlobalScopes([ActiveStatusScope::class])
 //            ->join('categories', 'categories.id', '=', 'products.category_id')
@@ -43,7 +50,8 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        $this->authorize('create',Product::class);
+//        $this->authorize('create',Product::class);
+
         $categories = Category::pluck('name', 'id');
 
         return view('admin.products.create', [
@@ -60,13 +68,22 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('store',Product::class);
+//       $r = $this->authorize('store',Product::class);
 
-        $request->validate(Product::validateRules());
 
         /*$request->merge([
             'slug' => Str::slug($request->post('name')),
         ]);*/
+
+        $image = [];
+        if($request->hasfile('image')){
+            foreach ($request->file('image') as $file){
+                $filename = uniqid();
+                $file->move(public_path().'/products/',$filename);
+                $image[] = $filename;
+            }
+        }
+
         $product = Product::create( $request->all() );
 
         return redirect()->route('products.index')
@@ -85,7 +102,7 @@ class ProductsController extends Controller
 
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
 
-        $this->authorize('show',$product);
+//        $this->authorize('show',$product);
 
         return view('admin.products.show', [
             'product' => $product,
@@ -102,7 +119,7 @@ class ProductsController extends Controller
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
 
-        $this->authorize('edit',$product);
+//        $this->authorize('edit',$product);
 
         return view('admin.products.edit', [
             'product' => $product,
@@ -121,7 +138,7 @@ class ProductsController extends Controller
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
 
-        $this->authorize('update',$product);
+//        $this->authorize('update',$product);
 
 
         $request->validate( Product::validateRules() );
@@ -163,7 +180,7 @@ class ProductsController extends Controller
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);
 
-        $this->authorize('destroy',$product);
+//        $this->authorize('destroy',$product);
 
         $product->delete();
 

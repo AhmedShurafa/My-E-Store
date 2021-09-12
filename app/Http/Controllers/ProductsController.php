@@ -10,12 +10,14 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-        return Product::active()->price(200, 500)->paginate();
+        $products = Product::active()->paginate();
+        return view('front.product.index',compact('products'));
+
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $product = Product::findOrFail($id);
-        return $product;
+        $product = Product::where('slug',$slug)->firstOrFail();
+        return view('front.product.show',compact('product'));
     }
 }

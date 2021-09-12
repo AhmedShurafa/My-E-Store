@@ -38,13 +38,20 @@ class CategoriesController extends Controller
         ORDER BY created_at DESC, name ASC
         */
         // return collection of Category model object
-        $entries = Category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
-            ->select([
-                'categories.*',
-                'parents.name as parent_name'
-            ])
-            //->where('categories.status', '=', 'active')
-            ->orderBy('categories.created_at', 'DESC')
+//        $entries = Category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
+//            ->select([
+//                'categories.*',
+//                'parents.name as parent_name'
+//            ])
+//            //->where('categories.status', '=', 'active')
+//            ->orderBy('categories.created_at', 'DESC')
+//            ->orderBy('categories.name', 'ASC')
+//            ->withTrashed()
+//            ->simplepaginate(1);
+
+        // By relashion
+        $entries = Category::with('parent')
+            ->orderBy('created_at','DESC')
             ->orderBy('categories.name', 'ASC')
             ->withTrashed()
             ->simplepaginate(1);

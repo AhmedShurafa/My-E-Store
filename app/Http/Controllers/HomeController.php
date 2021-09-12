@@ -14,7 +14,7 @@ class HomeController extends Controller
             ->price(200, 500)
             ->limit(10)
             ->get();
-            
+
         return view('home', [
             'products' => $products,
         ]);

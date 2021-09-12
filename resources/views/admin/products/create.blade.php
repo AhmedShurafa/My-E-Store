@@ -13,7 +13,7 @@
 
 @section('content')
 
-<form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data" class="card p-3">
     @csrf
 
     @include('admin.products._form', [

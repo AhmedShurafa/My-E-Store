@@ -3,8 +3,8 @@
 @section('title')
 
     <h2>{{ $title }} </h2>
-<a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a>
-<a href="{{ route('categories.trash') }}" class="btn btn-sm btn-outline-dark">Trash</a>
+<a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">{{ __('Create') }}</a>
+<a href="{{ route('categories.trash') }}" class="btn btn-sm btn-outline-dark">{{ __('Trashed') }}</a>
 @endsection
 
 @section('breadcrumb')
@@ -26,7 +26,7 @@
                 <th>{{__('Name')}}</th>
                 <th>Slug</th>
                 <th>Parent ID</th>
-                <th>Status</th>
+                <th>{{__('status')}}</th>
                 <th>Created At</th>
                 <th></th>
                 <th></th>
@@ -39,7 +39,7 @@
                 <td>{{ $category->id }}</td>
                 <td>{{ $category->name }}</td>
                 <td>{{ $category->slug }}</td>
-                <td>{{ $category->parent_name }}</td>
+                <td>{{ $category->parent->name }}</td>
                 <td>{{ $category->status }}</td>
                 <td>{{ $category->created_at }}</td>
                 <td>

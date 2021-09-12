@@ -45,7 +45,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasAbility($ability){
 
+        $roles = Role::whereRaw('roles.id IN (SELECT role_id FROM role_user WHERE user_id = ?)', [
+            $this->id,
+        ])->get();
+        // SELECT * FROM roles WHERE id IN (SELECT role_id FROM role_user WHERE user_id = ?)
+        // SELECT * FROM roles INNER JOIN role_user ON roles.id = role_user.role_id WHERE role_user.user_id = ?
 
+        foreach ($roles as $role) {
+            if (in_array($ability, $role->abilities)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function profile()
@@ -71,6 +82,32 @@ class User extends Authenticatable implements MustVerifyEmail
     public function product()
     {
         return $this->hasMany(Product::class,'user_id','id');
+    }
+
+    // Notification
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+    public function routeNotificationForMail($notification = null)
+    {
+        // Return email address only...
+        return $this->email;//email_address
+    }
+
+    public function routeNotificationForNexmo($notification = null)
+    {
+        // Return email address only...
+        return $this->mobile;//if name colume database phone
+    }
+
+    // to channge name channel
+    public function receivesBroadcastNotificationsOn()
+    {
+        return "Notification.".$this->id;
     }
 
 }

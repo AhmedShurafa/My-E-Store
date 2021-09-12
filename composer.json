@@ -11,7 +11,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
-        "mcamara/laravel-localization": "^1.6"
+        "mcamara/laravel-localization": "^1.6",
+        "pusher/pusher-php-server": "^7.0",
+        "symfony/intl": "^5.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

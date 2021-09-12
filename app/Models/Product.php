@@ -31,6 +31,13 @@ class Product extends Model
         'quantity' => 'int',
     ];
 
+    protected $appends = [ //custom attribute make accessor
+        'image_url',
+        'formatted_price',
+        'permalink'
+    ];
+
+
     protected $perPage = 20;
 
     protected static function booted()
@@ -64,7 +71,7 @@ class Product extends Model
             'name' => 'required|max:255',
             'category_id' => 'nullable|int|exists:categories,id',
             'description' => 'nullable',
-            'image' => 'nullable|image|dimensions:min_width=300,min_height=300',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',//dimensions:min_width=300,min_height=300
             'price' => 'nullable|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'quantity' => 'nullable|int|min:0',
@@ -101,6 +108,11 @@ class Product extends Model
     {
         $fomatter = new NumberFormatter(App::getLocale(), NumberFormatter::CURRENCY);
         return $fomatter->formatCurrency($this->price, 'EUR');
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return route('product.show',$this->slug);
     }
 
     public function category()

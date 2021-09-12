@@ -33,22 +33,34 @@
           <div class="ps-section__header mb-50">
             <h3 class="ps-section__title" data-mask="features">- Features Products</h3>
             <ul class="ps-masonry__filter">
-              <li class="current"><a href="#" data-filter="*">All <sup>8</sup></a></li>
-              <li><a href="#" data-filter=".nike">Nike <sup>1</sup></a></li>
-              <li><a href="#" data-filter=".adidas">Adidas <sup>1</sup></a></li>
-              <li><a href="#" data-filter=".men">Men <sup>1</sup></a></li>
-              <li><a href="#" data-filter=".women">Women <sup>1</sup></a></li>
-              <li><a href="#" data-filter=".kids">Kids <sup>4</sup></a></li>
+              <li class="current"><a href="#" data-filter="*">All</a></li>
+              <li><a href="#" data-filter=".nike">Nike</a></li>
+              <li><a href="#" data-filter=".adidas">Adidas</a></li>
+              <li><a href="#" data-filter=".men">Men</a></li>
+              <li><a href="#" data-filter=".women">Women</a></li>
+              <li><a href="#" data-filter=".kids">Kids</a></li>
             </ul>
           </div>
-          <div class="ps-section__content pb-50">
-            <x-latest-products count="20" />
-          </div>
+
+            <div class="ps-section__content pb-50">
+                <x-latest-products count="20" />
+            </div>
+
         </div>
       </div>
       <div class="ps-section--offer">
-        <div class="ps-column"><a class="ps-offer" href="product-listing.html"><img src="{{ asset('assets/front/images/banner/home-banner-1.png') }}" alt=""></a></div>
-        <div class="ps-column"><a class="ps-offer" href="product-listing.html"><img src="{{ asset('assets/front/images/banner/home-banner-2.png') }}" alt=""></a></div>
+        <div class="ps-column">
+            <a class="ps-offer" href="product-listing.html">
+                <img src="{{ asset('assets/front/images/banner/home-banner-1.png') }}" alt="">
+            </a>
+        </div>
+
+        <div class="ps-column">
+            <a class="ps-offer" href="product-listing.html">
+                <img src="{{ asset('assets/front/images/banner/home-banner-2.png') }}" alt="">
+            </a>
+        </div>
+
       </div>
       <div class="ps-section--sale-off ps-section pt-80 pb-40">
         <div class="ps-container">
