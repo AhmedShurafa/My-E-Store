@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function profile()
     {
-        return $this->hasOne(User::class,'user_id','id');
+        return $this->hasOne(Profile::class,'user_id','id');
     }
 
     public function roles()
@@ -101,7 +101,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function routeNotificationForNexmo($notification = null)
     {
         // Return email address only...
-        return $this->mobile;//if name colume database phone
+        return $this->profile->phone;//if name colume database phone
+    }
+
+    public function routeNotificationForTwilio($notification = null)
+    {
+        // Return email address only...
+        return $this->profile->phone;//if name colume database phone
+    }
+
+    public function routeNotificationForTweetSms()
+    {
+        return $this->mobile;
     }
 
     // to channge name channel
@@ -109,5 +120,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return "Notification.".$this->id;
     }
-
 }

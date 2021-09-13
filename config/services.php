@@ -30,4 +30,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nexmo' => [
+        'sms_from' => '123654789', // name Store or name company
+    ],
+
+    'tweetsms' => [
+        'user' => env('TWEETSMS_USER'),
+        'password' => env('TWEETSMS_PASSWORD'),
+        'sender' => 'TweetTEST',
+    ],
 ];

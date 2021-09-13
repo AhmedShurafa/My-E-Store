@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\NexmoMessage;
+use TweetSmsChannle;
 
 class OrderCreatedNotification extends Notification
 {
@@ -36,7 +38,9 @@ class OrderCreatedNotification extends Notification
     public function via($notifiable)
     {
         // mail , database , nexmo (SMS), broadcast , slack , [custom channel]
-        return ['database','broadcast'];
+        // return ['database','broadcast'];
+        // return ['nexmo','mail'];
+        return [TweetSmsChannle::class];
         // $notifiable->notify_email
     }
 
@@ -97,6 +101,34 @@ class OrderCreatedNotification extends Notification
             'time'   => Carbon::now()->diffForHumans(),
         ]);
     }
+    /**
+     * Get the Vonage / SMS representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\NexmoMessage
+     */
+    public function toNexmo($notifiable)
+    {
+        $message = new \Illuminate\Notifications\Messages\NexmoMessage();
+        $message->content('A new order has been created (Order #:number).',[
+            'number' => $this->order->number,
+        ]);
+        return $message;
+    }
+
+    /**
+     * Get the Vonage / SMS representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\NexmoMessage
+     */
+    public function toTweetSms($notifiable)
+    {
+        return __('A new order has been created (Order #:number).',[
+            'number' => $this->order->number,
+        ]);
+    }
+
     /**
      * Get the array representation of the notification.
      *
