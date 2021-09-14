@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Str;
 class Category extends Model
 {
     use HasFactory;
@@ -29,6 +29,20 @@ class Category extends Model
     protected $fillable = [
         'name', 'slug', 'parent_id', 'status', 'description',
     ];
+
+    protected $appends = [
+        'original_name'
+    ];
+
+    // event when make add or update
+    protected static function booted()
+    {
+        static::creating(function (Category $category)
+        {
+            $category->slug = Str::slug($category->name);
+        });
+    }
+
 
     // Accessors: get{AttributeName}Attribute
     // Exists Attribute
@@ -62,5 +76,14 @@ class Category extends Model
             ->withDefault([
                 'name' => 'No Parent'
             ]);
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode([
+            'id' => $this->id,
+            'title' => $this->name,
+            'sub_category' => $this->children,
+        ]);
     }
 }
