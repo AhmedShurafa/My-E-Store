@@ -8,6 +8,7 @@ use App\Models\Category;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response as FacadesResponse;
 
 // use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,6 +22,10 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
+        if(! $request->user()->tokenCan('categories.index'))
+        {
+            abort(403,'Not Allowed!');
+        }
         $categories = Category::when($request->query(),function($query,$value){
             $query->where('name',$value);
         })->paginate(1);
@@ -35,6 +40,13 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        // $user = Auth::guard('sanctum')->user();
+
+        if(! $request->user()->tokenCan('categories.create'))
+        {
+            abort(403,'Not Allowed!');
+        }
+
         $request->validate([
             'name'      => 'required',
             'parent_id' => 'nullable|exists:categories,parent_id',

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\App;
 
 class CartController extends Controller
 {
-
     /**
      * @var \App\Repositories\Cart\CartRepository
      */

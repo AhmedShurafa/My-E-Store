@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthTokensController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,8 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('auth/tokens',[AuthTokensController::class,'store']);
+Route::delete('auth/logout',[AuthTokensController::class,'destroy']);
 
-Route::apiResource('categories','Api\CategoriesController');
 
-Route::apiResource('products','Api\ProductsController');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('categories','Api\CategoriesController');
+    Route::apiResource('products','Api\ProductsController');
+});
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Traits\ReturnData;
 use App\Traits\GeneralTrait;
@@ -46,9 +47,7 @@ class ProductsController extends Controller
         }catch(Throwable $e){
             // return report($e);
             return $this->returnError(404,$e);
-
         }
-
     }
 
     /**
@@ -63,7 +62,7 @@ class ProductsController extends Controller
         if(!$product){
             return $this->returnError(404,__("This Product Not Exists"));
         }
-        return $this->returnData("data",$product,__("This Product is Exists"));
+        return $this->returnData("data",new ProductResource($product),__("This Product is Exists"));
     }
 
     /**

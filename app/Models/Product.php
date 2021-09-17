@@ -21,7 +21,7 @@ class Product extends Model
     const STATUS_DRAFT  = 'draft';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image_path', 'price', 'sale_price',
+        'id','name', 'slug', 'description', 'image_path', 'price', 'sale_price',
         'quantity', 'weight', 'width', 'height', 'length', 'status',
         'category_id',
     ];

@@ -7,11 +7,15 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
-
+    use HasApiTokens;
     /**
      * The attributes that are mass assignable.
      *
@@ -120,4 +124,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return "Notification.".$this->id;
     }
+
+    // sanctum Laravel
+    // Three Solution
+    // public function createToken(string $name, array $abilities = ['*'] , $ip = null)
+    // {
+    //     $token = new PersonalAccessToken();
+
+    //     $token->forceFill([
+    //         'tokenable_type' => static::class,
+    //         'tokenable_id' => $this->id,
+    //         'name' => $name,
+    //         'token' => hash('sha256', $plainTextToken = Str::random(40)),
+    //         'abilities' => $abilities,
+    //         'ip' => $ip,
+    //     ])->save();
+
+    //     return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
+    // }
 }

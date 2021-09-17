@@ -89,7 +89,7 @@ class CheckoutController extends Controller
 
             return redirect()->route('orders');// with success
 
-        } catch (\Throwable $e) {
+        }catch (\Throwable $e) {
             DB::rollBack();
             throw $e;
         }
